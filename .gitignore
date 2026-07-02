@@ -1,0 +1,6 @@
+__pycache__/*
+.env
+backfill_historial_2026.py
+credenciales_servicio.json
+main.py
+visualizacion.py
