@@ -1,0 +1,42 @@
+# .github/workflows/static.yml
+name: Deploy Static Content to Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+# Configura los permisos del GITHUB_TOKEN para permitir el despliegue en GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Evita ejecuciones simultáneas redundantes
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/pages-infrastructure-by-path@v0.0.1
+        # Usamos el setup de páginas nativo optimizado de GitHub
+        
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Indicamos que suba la raíz del proyecto (donde está index.html)
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
